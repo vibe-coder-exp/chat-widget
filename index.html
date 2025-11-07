@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netlify Bot Test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f9fafb;
+    }
+    textarea {
+      width: 300px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    p {
+      margin-top: 20px;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>Netlify Function Chat Test</h2>
+  <textarea id="msg" placeholder="Type message..."></textarea>
+  <button onclick="sendMsg()">Send</button>
+  <p id="reply"></p>
+
+  <script>
+    async function sendMsg() {
+      const message = document.getElementById("msg").value;
+      const response = await fetch("/.netlify/functions/chat-message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      const data = await response.json();
+      document.getElementById("reply").innerText = data.reply || data.error;
+    }
+  </script>
+</body>
+</html>
